@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import RecipeCard from "@/components/RecipeCard";
-import { AdSlot, DogHero, TopBar, TreatArt } from "@/components/ui";
+import { AdSlot, TopBar, TreatArt } from "@/components/ui";
 import { PRESETS, presetHref } from "@/lib/presets";
 import { useLogs, useProfile, useRecipes, useViewed } from "@/lib/store";
 import { TREAT_TYPES } from "@/lib/types";
@@ -40,7 +40,7 @@ export default function HomePage() {
         <span aria-hidden className="absolute -top-10 -right-8 h-36 w-36 rounded-full bg-white/50" />
         <span aria-hidden className="absolute bottom-6 -left-6 h-16 w-16 rounded-full bg-white/40" />
         {/* 글씨는 넓게 쓰고, 강아지는 오른쪽 아래에 앉혀서 슬로건이 어색하게 끊기지 않게 */}
-        <div className="relative min-h-[214px] pb-6">
+        <div className="relative min-h-[240px] pb-6">
           <span className="inline-block rounded-full bg-paper/80 px-3 py-1 text-[13px] font-semibold text-brown">
             무첨가 · 재료 안전성 먼저
           </span>
@@ -48,7 +48,15 @@ export default function HomePage() {
             우리 강아지를 위한<br />건강한 한입
           </p>
           <p className="mt-2 max-w-[55%] text-[14px] leading-snug text-muted">통과한 재료로만 레시피를 만들어요</p>
-          <DogHero className="absolute right-[-12px] bottom-0 h-[128px] w-[128px]" />
+          {/* 멍스푼의 주인공: 하쿠 실제 사진 (public/haku.jpg) — 동그랗게 자르고 흰 테두리 + 그림자 */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/haku.jpg"
+            alt="멍스푼의 주인공 시바견 하쿠"
+            width={132}
+            height={132}
+            className="absolute right-0 bottom-5 h-[132px] w-[132px] rounded-full border-4 border-paper object-cover shadow-lift"
+          />
         </div>
       </section>
 
