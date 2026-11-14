@@ -1,0 +1,68 @@
+/* ─────────────────────────────────────────────
+   멍스푼 전체 디자인 기준 (색·글꼴)
+   - 크림/베이지 바탕 + 차분한 브라운 포인트
+   ───────────────────────────────────────────── */
+@import "tailwindcss";
+
+/* 글꼴: 제목은 고운바탕(따뜻한 명조), 본문은 IBM Plex Sans KR(또렷한 고딕) */
+@import "@fontsource/gowun-batang/400.css";
+@import "@fontsource/gowun-batang/700.css";
+@import "@fontsource/ibm-plex-sans-kr/400.css";
+@import "@fontsource/ibm-plex-sans-kr/500.css";
+@import "@fontsource/ibm-plex-sans-kr/600.css";
+
+@theme {
+  /* 바탕색 */
+  --color-cream: #fbf6ec;   /* 화면 바탕 */
+  --color-paper: #fffdf8;   /* 카드 바탕 */
+  --color-beige: #f0e4cd;   /* 연한 강조 */
+  --color-sand: #dcc9a6;    /* 테두리·구분선 */
+  /* 글자·포인트 */
+  --color-brown: #6f4e37;   /* 포인트(버튼) */
+  --color-espresso: #3a2a1e;/* 본문 글자 */
+  --color-muted: #7d6c5b;   /* 보조 글자 */
+  /* 안전성 4단계 색 */
+  --color-ok: #4e6b3a;
+  --color-ok-bg: #e9efdd;
+  --color-caution: #8f5f12;
+  --color-caution-bg: #f7e9c9;
+  --color-block: #9a3a28;
+  --color-block-bg: #f6ddd5;
+  --color-hold: #655e55;
+  --color-hold-bg: #e9e4db;
+
+  --font-sans: "IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Gowun Batang", "Nanum Myeongjo", serif;
+}
+
+html {
+  background: var(--color-beige);
+}
+body {
+  background: var(--color-cream);
+  color: var(--color-espresso);
+  font-family: var(--font-sans);
+  font-size: 17px;          /* 큰 글씨 기본 */
+  line-height: 1.6;
+  word-break: keep-all;     /* 한글 단어가 중간에 끊기지 않게 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 키보드로 이동할 때 보이는 초점 테두리 */
+:focus-visible {
+  outline: 3px solid var(--color-brown);
+  outline-offset: 2px;
+}
+
+/* 레시피 계량표의 점선(재료 ····· 80g) */
+.leader {
+  flex: 1;
+  border-bottom: 2px dotted var(--color-sand);
+  transform: translateY(-0.35em);
+  margin: 0 0.5rem;
+}
+
+/* 움직임 줄이기 설정을 켠 사용자에게는 애니메이션을 끕니다 */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
