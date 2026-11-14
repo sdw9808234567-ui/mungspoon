@@ -102,6 +102,20 @@ export function TreatArt({ type, className = "" }: { type: TreatType; className?
           <stop offset="0" stopColor="#fff" stopOpacity="0.85" />
           <stop offset="1" stopColor="#fff" stopOpacity="0" />
         </linearGradient>
+        {/* 구운 반죽 질감: 미세한 울퉁불퉁함(노이즈)에 빛을 비춰 표면에 입힘 */}
+        <filter id={id("tex")} x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.16" numOctaves="2" seed="7" result="noise" />
+          <feDiffuseLighting in="noise" lightingColor="#fff" surfaceScale="1.6" result="light">
+            <feDistantLight azimuth="225" elevation="58" />
+          </feDiffuseLighting>
+          <feComposite in="light" in2="SourceGraphic" operator="arithmetic" k1="1.08" k2="0" k3="0" k4="0" result="lit" />
+          <feComposite in="lit" in2="SourceGraphic" operator="in" />
+        </filter>
+        {/* 그림 전체에 얹는 아주 옅은 종이 질감 (손그림 일러스트 느낌) */}
+        <filter id={id("grain")} x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="2" seed="3" />
+          <feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.25  0 0 0 0 0.15  0 0 0 0.07 0" />
+        </filter>
         {/* 부드러운 그림자 번짐 효과 */}
         <filter id={id("soft")} x="-30%" y="-30%" width="160%" height="160%">
           <feGaussianBlur stdDeviation="4" />
@@ -121,6 +135,8 @@ export function TreatArt({ type, className = "" }: { type: TreatType; className?
       <ellipse cx="120" cy="160" rx="88" ry="15" fill={C.shadow} filter={url("soft")} />
       <ellipse cx="120" cy="152" rx="88" ry="20" fill={url("plate")} />
       <ellipse cx="120" cy="150" rx="68" ry="13" fill="#f8f2e8" stroke="#e6d9c6" strokeWidth="1" />
+      {/* 간식이 접시에 닿는 곳의 진한 그림자 → 붕 떠 보이지 않게 */}
+      <ellipse cx="120" cy="148" rx="58" ry="9" fill="rgba(80,45,15,0.28)" filter={url("soft")} />
 
       {/* ③ 간식 본체 */}
       {type === "cookie" && <Cookie url={url} />}
@@ -132,6 +148,7 @@ export function TreatArt({ type, className = "" }: { type: TreatType; className?
       {type === "bite" && <Bite url={url} id={id} />}
       {type === "soft" && <Soft url={url} />}
       </g>
+      <rect width="240" height="200" filter={url("grain")} />
     </svg>
   );
 }
@@ -375,61 +392,73 @@ function Soft({ url }: ArtProps) {
 }
 
 /**
- * 홈 화면 대표 캐릭터: 쿠키를 든 강아지
+ * 홈 화면 대표 캐릭터: 쿠키를 앞에 두고 앉아 웃는 시바견
+ * 시바 특징 → 주황빛 털, 흰 '우라지로'(볼·주둥이·가슴의 흰 털), 쫑긋 세모 귀,
+ *             눈썹 위 흰 점, 동그랗게 말린 꼬리, 활짝 웃는 입
  * (하쿠 사진이 생기면 이 자리를 사진으로 바꿀 수 있어요)
  */
 export function DogHero({ className = "" }: { className?: string }) {
   const uid = useId().replace(/:/g, "");
-  const fur = `${uid}-fur`;
+  const g = (n: string) => `${uid}-${n}`;
+  const u = (n: string) => `url(#${g(n)})`;
   return (
-    <svg viewBox="0 0 200 190" className={className} role="img" aria-label="쿠키를 들고 있는 강아지 그림">
+    <svg viewBox="16 18 168 168" className={className} role="img" aria-label="웃고 있는 시바견 그림">
       <defs>
-        <radialGradient id={fur} cx="45%" cy="35%" r="70%">
-          <stop offset="0" stopColor="#fffaf0" />
-          <stop offset="1" stopColor="#efd9b8" />
+        {/* 주황 털: 위는 밝고 아래·가장자리는 진하게 */}
+        <radialGradient id={g("fur")} cx="50%" cy="30%" r="75%">
+          <stop offset="0" stopColor="#f0a25a" />
+          <stop offset="0.65" stopColor="#d97f2e" />
+          <stop offset="1" stopColor="#b9631d" />
         </radialGradient>
+        {/* 흰 털(우라지로): 크림색 */}
+        <linearGradient id={g("white")} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fffaf0" />
+          <stop offset="1" stopColor="#f3e3c8" />
+        </linearGradient>
+        <filter id={g("blur")} x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3" />
+        </filter>
       </defs>
-      {/* 바닥 그림자 */}
-      <ellipse cx="100" cy="182" rx="62" ry="7" fill="rgba(90,55,20,0.18)" />
-      {/* 몸통 */}
-      <path d="M46 182c-4-40 18-62 54-62s58 22 54 62z" fill={`url(#${fur})`} />
-      {/* 스카프 (멍스푼 브라운 + 흰 점) */}
-      <path d="M58 126q42 22 84 0l-6 14q-36 16-72 0z" fill="#6f4e37" />
-      <path d="M92 136l8 22 8-22z" fill="#6f4e37" />
-      {[[74, 132], [100, 140], [126, 132], [100, 150]].map(([x, y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="2" fill="#f0e4cd" />)}
-      {/* 귀 (뒤) */}
-      <path d="M50 52C26 56 22 104 40 116c14 8 22-20 24-44z" fill="#c99a6b" />
-      <path d="M150 52c24 4 28 52 10 64-14 8-22-20-24-44z" fill="#c99a6b" />
-      {/* 머리 */}
-      <ellipse cx="100" cy="76" rx="54" ry="48" fill={`url(#${fur})`} />
-      {/* 정수리 곱슬 털 */}
-      <path d="M90 30q6-10 12-2q6-8 10 2" stroke="#e6cba4" strokeWidth="5" strokeLinecap="round" fill="none" />
-      {/* 볼 터치 */}
-      <ellipse cx="66" cy="96" rx="10" ry="6" fill="#f4b6a6" opacity="0.6" />
-      <ellipse cx="134" cy="96" rx="10" ry="6" fill="#f4b6a6" opacity="0.6" />
-      {/* 주둥이 */}
-      <ellipse cx="100" cy="98" rx="24" ry="17" fill="#fffdf6" />
-      {/* 눈 (반짝임 2개) */}
-      {[78, 122].map((x) => (
-        <g key={x}>
-          <ellipse cx={x} cy="78" rx="7.5" ry="8.5" fill="#2b1d14" />
-          <circle cx={x + 2.5} cy="74.5" r="2.6" fill="#fff" />
-          <circle cx={x - 2.5} cy="82" r="1.2" fill="#fff" />
-        </g>
-      ))}
-      {/* 코 */}
-      <path d="M92 89q8-4 16 0q-2 8-8 9q-6-1-8-9z" fill="#3a2a1e" />
-      <ellipse cx="97" cy="90" rx="3" ry="1.5" fill="#fff" opacity="0.6" />
-      {/* 입 + 혀 */}
-      <path d="M90 101q5 6 10 1q5 5 10-1" stroke="#3a2a1e" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-      <path d="M96 104q4 10 8 0z" fill="#ef8f8a" />
-      {/* 앞발 + 쿠키 */}
-      <ellipse cx="100" cy="164" rx="24" ry="18" fill="#c4813b" />
-      <ellipse cx="100" cy="161" rx="24" ry="18" fill="#e6ad63" />
-      <Paw x={100} y={161} s={0.55} fill="#b8783a" opacity={0.7} />
-      <ellipse cx="72" cy="170" rx="15" ry="11" fill="#fffaf0" stroke="#e6cba4" />
-      <ellipse cx="128" cy="170" rx="15" ry="11" fill="#fffaf0" stroke="#e6cba4" />
-      <path d="M68 166v6M74 166v6M124 166v6M130 166v6" stroke="#e0c49c" strokeWidth="1.6" strokeLinecap="round" />
+
+      {/* 어깨·가슴 (상반신) */}
+      <path d="M40 200c0-40 22-70 60-72 38 2 60 32 60 72z" fill={u("fur")} />
+      {/* 가슴 흰 털 */}
+      <path d="M70 132c4 30 14 52 30 64 16-12 26-34 30-64-14 8-46 8-60 0z" fill={u("white")} />
+      {/* 스카프 (멍스푼 브라운) */}
+      <path d="M62 124q38 18 76 0l-4 12q-34 14-68 0z" fill="#6f4e37" />
+      <path d="M92 132l8 16 8-16z" fill="#5a3e2b" />
+
+      {/* 귀: 바깥 주황 + 안쪽 크림 */}
+      <path d="M46 72L44 32c0-8 6-10 11-6l31 24z" fill={u("fur")} />
+      <path d="M154 72l2-40c0-8-6-10-11-6l-31 24z" fill={u("fur")} />
+      <path d="M52 62l-1-26 22 17z" fill="#ffe9d2" />
+      <path d="M148 62l1-26-22 17z" fill="#ffe9d2" />
+
+      {/* 머리: 볼이 통통한 시바 얼굴형 (볼 끝 털 뭉치 포함) */}
+      <path d="M100 38c30 0 52 14 62 36 6 13 10 26 4 37l6 5-9 1c-12 16-36 23-63 23s-51-7-63-23l-9-1 6-5c-6-11-2-24 4-37 10-22 32-36 62-36z" fill={u("fur")} />
+      {/* 우라지로(흰 털): 눈 아래부터 볼·주둥이까지 */}
+      <path d="M100 76c-8 0-12 6-18 10-10 6-26 4-38 8-5 9-3 19 6 26 14 11 32 14 50 14s36-3 50-14c9-7 11-17 6-26-12-4-28-2-38-8-6-4-10-10-18-10z" fill={u("white")} />
+      {/* 눈썹 위 흰 점 (시바의 상징) */}
+      <ellipse cx="77" cy="64" rx="6" ry="3.6" fill="#fff3df" transform="rotate(-10 77 64)" />
+      <ellipse cx="123" cy="64" rx="6" ry="3.6" fill="#fff3df" transform="rotate(10 123 64)" />
+
+      {/* 눈: 살짝 아몬드형 + 반짝임 */}
+      <ellipse cx="79" cy="80" rx="6.2" ry="6.8" fill="#24160d" />
+      <ellipse cx="121" cy="80" rx="6.2" ry="6.8" fill="#24160d" />
+      <circle cx="81.200" cy="77.500" r="2.200" fill="#fff" />
+      <circle cx="123.200" cy="77.500" r="2.200" fill="#fff" />
+
+      {/* 코 + 콧등 */}
+      <path d="M91 96c0-4 4-5 9-5s9 1 9 5c0 4-5 7-9 7s-9-3-9-7z" fill="#24160d" />
+      <ellipse cx="96.500" cy="94" rx="3" ry="1.500" fill="#fff" opacity="0.5" />
+      {/* 활짝 웃는 입 + 혀 */}
+      <path d="M100 103v4" stroke="#24160d" strokeWidth="2" strokeLinecap="round" />
+      <path d="M86 106c4 4 9 4 14 1 5 3 10 3 14-1-2 12-8 18-14 18s-12-6-14-18z" fill="#5a2418" />
+      <path d="M92 116c3-5 13-5 16 0-2 5-5 7-8 7s-6-2-8-7z" fill="#ef8a80" />
+      {/* 볼 홍조 */}
+      <ellipse cx="62" cy="100" rx="9" ry="5" fill="#f2a294" opacity="0.45" />
+      <ellipse cx="138" cy="100" rx="9" ry="5" fill="#f2a294" opacity="0.45" />
+
     </svg>
   );
 }
