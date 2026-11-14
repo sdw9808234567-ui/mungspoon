@@ -31,6 +31,10 @@
   --color-hold: #655e55;
   --color-hold-bg: #e9e4db;
 
+  /* 카드 그림자: 은은하게 떠 있는 느낌 (shadow-card / shadow-lift 클래스로 사용) */
+  --shadow-card: 0 1px 2px rgba(58, 42, 30, 0.05), 0 6px 18px rgba(58, 42, 30, 0.08);
+  --shadow-lift: 0 2px 4px rgba(58, 42, 30, 0.08), 0 14px 32px rgba(111, 78, 55, 0.22);
+
   --font-sans: "IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-display: "Gowun Batang", "Nanum Myeongjo", serif;
 }
