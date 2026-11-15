@@ -1,9 +1,11 @@
 "use client";
 // 홈(메인) 화면
+// ★ 2026-11 프리미엄 펫 베이커리 콘셉트: 사진 중심 카드, 장식·그림 아이콘 제거
+//   (기능·데이터 처리 방식은 이전과 똑같습니다)
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import RecipeCard from "@/components/RecipeCard";
-import { AdSlot, TopBar, TreatArt } from "@/components/ui";
+import { AdSlot, HERO_PHOTO, TopBar, TreatArt } from "@/components/ui";
 import { PRESETS, presetHref } from "@/lib/presets";
 import { useLogs, useProfile, useRecipes, useViewed } from "@/lib/store";
 import { TREAT_TYPES } from "@/lib/types";
@@ -30,19 +32,46 @@ export default function HomePage() {
 
   return (
     <main>
-      <TopBar right={<Link href="/blog" className="min-h-11 px-2 py-2 font-semibold text-brown">블로그</Link>} />
+      <TopBar right={<Link href="/blog" className="min-h-11 px-2 py-2 text-[15px] font-medium text-brown underline-offset-4 active:underline">블로그</Link>} />
 
-      {/* 슬로건 */}
-      <p className="px-5 font-display text-[30px] font-bold leading-snug">
-        우리 강아지를 위한<br />건강한 한입
-      </p>
+      {/* ── 대표 배너: 브랜드 소개 (반려견 사진은 쓰지 않습니다) ──
+          HERO_PHOTO(간식 제품 사진)가 등록되어 있으면 사진을 위에 보여 주고,
+          없으면 글자만 있는 짙은 브라운 배너로 보여 줍니다. */}
+      <section className="mx-5 mt-1 overflow-hidden rounded-2xl bg-espresso text-paper shadow-card">
+        {HERO_PHOTO && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={HERO_PHOTO}
+            alt="접시에 담긴 여러 가지 강아지 수제간식"
+            width={960}
+            height={720}
+            fetchPriority="high"
+            className="aspect-[4/3] w-full object-cover"
+          />
+        )}
+        <div className="px-6 pt-7 pb-6">
+          <span className="text-[12px] font-medium tracking-[0.24em] text-sand">HOMEMADE PET BAKERY</span>
+          <p className="mt-2.5 font-display text-[28px] font-bold leading-[1.3]">
+            우리 강아지를 위한<br />건강한 한입
+          </p>
+          <p className="mt-2.5 text-[14px] leading-relaxed text-beige">
+            재료의 안전성을 먼저 확인하고,<br />통과한 재료로만 레시피를 만듭니다.
+          </p>
+          {/* 서비스의 핵심 세 가지 (가는 선으로 구분) */}
+          <ul className="mt-5 grid grid-cols-3 border-t border-white/15 pt-4 text-center text-[13px] text-beige">
+            <li>무첨가 배합</li>
+            <li className="border-x border-white/15">재료 안전성 검사</li>
+            <li>수제간식 8종</li>
+          </ul>
+        </div>
+      </section>
 
-      {/* 강아지 프로필 */}
-      <Link href="/profile" className="mx-5 mt-5 flex items-center gap-4 rounded-2xl border border-sand bg-paper p-4 active:bg-beige">
-        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-beige font-display text-[24px] font-bold text-brown" aria-hidden>
-          {profile.name ? profile.name[0] : "멍"}
+      {/* ── 강아지 프로필 ── */}
+      <Link href="/profile" className="mx-5 mt-4 flex items-center gap-4 rounded-2xl border border-sand/60 bg-paper p-4 active:bg-beige">
+        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-beige font-display text-[22px] font-bold text-brown" aria-hidden>
+          {profile.name ? profile.name[0] : "+"}
         </span>
-        <span className="min-w-0">
+        <span className="min-w-0 flex-1">
           {profile.name ? (
             <>
               <span className="block truncate text-[19px] font-semibold">{profile.name}</span>
@@ -57,43 +86,56 @@ export default function HomePage() {
             </>
           )}
         </span>
+        <Chevron />
       </Link>
 
-      {/* 가장 중요한 두 버튼 */}
-      <div className="mt-5 grid gap-3 px-5">
-        <Link href="/make" className="flex min-h-[72px] items-center justify-between rounded-2xl bg-brown px-5 text-paper active:bg-espresso">
-          <span>
-            <span className="block text-[21px] font-semibold">내 재료로 간식 만들기</span>
-            <span className="block text-[15px] text-beige">재료 선택 → 안전성 분석 → 레시피</span>
+      {/* ── 가장 중요한 두 버튼 ── */}
+      <div className="mt-4 grid gap-3 px-5">
+        <Link href="/make" className="flex min-h-[76px] items-center gap-4 rounded-2xl bg-espresso px-5 text-paper shadow-lift active:opacity-90">
+          <span className="min-w-0 flex-1">
+            <span className="block text-[19px] font-semibold">내 재료로 간식 만들기</span>
+            <span className="block text-[14px] text-sand">재료 선택 → 안전성 분석 → 레시피</span>
           </span>
+          <Chevron light />
         </Link>
-        <Link href="/check" className="flex min-h-16 items-center rounded-2xl border-2 border-brown bg-paper px-5 text-brown active:bg-beige">
-          <span>
-            <span className="block text-[19px] font-semibold">재료 안전성 검사</span>
-            <span className="block text-[15px] text-muted">이 재료, 강아지에게 써도 될까?</span>
+        <Link href="/check" className="flex min-h-[68px] items-center gap-4 rounded-2xl border border-sand/60 bg-paper px-5 text-espresso active:bg-beige">
+          <span className="min-w-0 flex-1">
+            <span className="block text-[18px] font-semibold">재료 안전성 검사</span>
+            <span className="block text-[14px] text-muted">이 재료, 강아지에게 써도 될까?</span>
           </span>
+          <Chevron />
         </Link>
       </div>
 
-      {/* 오늘의 추천 레시피 */}
+      {/* ── 오늘의 추천 레시피 ── */}
       <Block title="오늘의 추천 레시피">
-        <Link href={presetHref(today)} className="mx-5 block overflow-hidden rounded-3xl border border-sand bg-paper active:bg-beige">
-          <TreatArt type={today.type} className="aspect-[12/7] w-full" />
-          <span className="block p-4">
+        <Link href={presetHref(today)} className="mx-5 block overflow-hidden rounded-2xl bg-paper shadow-card active:opacity-90">
+          <span className="relative block">
+            <TreatArt type={today.type} className="aspect-[4/3] w-full" />
+            <span className="absolute top-3 left-3 rounded-md bg-espresso/85 px-2.5 py-1 text-[12px] font-medium tracking-wide text-paper">
+              오늘의 추천
+            </span>
+          </span>
+          <span className="block p-5">
             <span className="block font-display text-[24px] font-bold">{today.title}</span>
-            <span className="block text-muted">필요한 재료: {today.ingredients.join(", ")}</span>
+            <span className="sr-only">필요한 재료: {today.ingredients.join(", ")}</span>
+            <span className="mt-2 flex flex-wrap gap-1.5" aria-hidden>
+              {today.ingredients.map((i) => (
+                <span key={i} className="rounded-md border border-sand px-2.5 py-0.5 text-[14px] text-muted">{i}</span>
+              ))}
+            </span>
           </span>
         </Link>
       </Block>
 
-      {/* 기본 수제간식 (이용 통계가 쌓이면 '인기 수제간식'으로 바꿀 자리) */}
+      {/* ── 기본 수제간식 (이용 통계가 쌓이면 '인기 수제간식'으로 바꿀 자리) ── */}
       <Block title="기본 수제간식" sub="재료 2~4가지로 시작하기 좋은 조합">
-        <ul className="flex snap-x gap-3 overflow-x-auto px-5 pb-2">
+        <ul className="flex snap-x gap-3 overflow-x-auto px-5 pt-1 pb-4">
           {others.map((p) => (
-            <li key={p.title} className="w-40 shrink-0 snap-start">
-              <Link href={presetHref(p)} className="block overflow-hidden rounded-2xl border border-sand bg-paper active:bg-beige">
+            <li key={p.title} className="w-44 shrink-0 snap-start">
+              <Link href={presetHref(p)} className="block overflow-hidden rounded-2xl bg-paper shadow-card active:opacity-90">
                 <TreatArt type={p.type} className="aspect-[6/5] w-full" />
-                <span className="block p-3">
+                <span className="block p-3.5">
                   <span className="block text-[17px] font-semibold leading-snug">{p.title}</span>
                   <span className="mt-0.5 block text-[14px] text-muted">{p.ingredients.join(", ")}</span>
                 </span>
@@ -103,14 +145,17 @@ export default function HomePage() {
         </ul>
       </Block>
 
-      {/* 카테고리 */}
+      {/* ── 카테고리 ── */}
       <Block title="종류별로 만들기">
-        <ul className="grid grid-cols-4 gap-2 px-5">
+        <ul className="grid grid-cols-2 gap-3 px-5">
           {TREAT_TYPES.map((t) => (
             <li key={t.id}>
-              <Link href={`/make?type=${t.id}`} className="block overflow-hidden rounded-2xl border border-sand bg-paper text-center active:bg-beige">
+              <Link href={`/make?type=${t.id}`} className="block overflow-hidden rounded-2xl bg-paper shadow-card active:opacity-90">
                 <TreatArt type={t.id} className="aspect-[6/5] w-full" />
-                <span className="block px-1 py-2 text-[15px] font-semibold leading-tight">{t.label}</span>
+                <span className="block px-3.5 py-3">
+                  <span className="block text-[17px] font-semibold leading-tight">{t.label}</span>
+                  <span className="mt-0.5 block text-[13px] text-muted">{t.hint}</span>
+                </span>
               </Link>
             </li>
           ))}
@@ -119,11 +164,11 @@ export default function HomePage() {
 
       <AdSlot id="home-middle" />
 
-      {/* 최근 본 레시피 */}
+      {/* ── 최근 본 레시피 ── */}
       <Block title="최근 본 레시피">
         <div className="px-5">
           {recent.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-sand px-5 py-6 text-center text-muted">
+            <p className="rounded-2xl border border-dashed border-sand bg-paper/60 px-5 py-6 text-center text-muted">
               레시피를 만들면 여기에 최근 본 순서대로 보여요.
             </p>
           ) : (
@@ -134,25 +179,44 @@ export default function HomePage() {
         </div>
       </Block>
 
-      {/* 블로그 연결 */}
+      {/* ── 블로그 연결 ── */}
       <Block title="바른 멍생활 블로그">
-        <Link href="/blog" className="mx-5 block rounded-2xl bg-beige p-4 active:bg-sand">
-          <span className="block text-[18px] font-semibold">블로그 방문 / 제작 후기 / 블로그 레시피</span>
-          <span className="block text-muted">네이버 블로그 ‘바른 멍생활’로 연결돼요.</span>
+        <Link href="/blog" className="mx-5 flex items-center gap-4 rounded-2xl border border-sand/60 bg-paper p-4 active:bg-beige">
+          <span className="min-w-0 flex-1">
+            <span className="block text-[17px] font-semibold">블로그 방문 / 제작 후기 / 블로그 레시피</span>
+            <span className="block text-[14px] text-muted">네이버 블로그 ‘바른 멍생활’로 연결돼요.</span>
+          </span>
+          <Chevron />
         </Link>
       </Block>
+
+      {/* ── 맨 아래: 개인정보처리방침 (플레이스토어 등록에 필요) ── */}
+      <footer className="mt-10 px-5 text-center text-[13px] text-muted">
+        <Link href="/privacy" className="underline underline-offset-2">개인정보처리방침</Link>
+        <p className="mt-1">© 멍스푼 · 바른 멍생활</p>
+      </footer>
     </main>
   );
 }
 
+/** 구역 제목 + 내용 */
 function Block({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
   return (
-    <section className="mt-9">
+    <section className="mt-10">
       <div className="mb-3 px-5">
-        <h2 className="font-display text-[23px] font-bold">{title}</h2>
+        <h2 className="font-display text-[22px] font-bold tracking-tight">{title}</h2>
         {sub && <p className="text-[15px] text-muted">{sub}</p>}
       </div>
       {children}
     </section>
+  );
+}
+
+/** 오른쪽 화살표 (">") */
+function Chevron({ light = false }: { light?: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" className={`h-5 w-5 shrink-0 ${light ? "text-beige" : "text-sand"}`} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M9 5l7 7-7 7" />
+    </svg>
   );
 }

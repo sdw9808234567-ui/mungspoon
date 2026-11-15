@@ -74,3 +74,16 @@ npm run dev                      # http://localhost:3000
 node tests/api-test.mjs          # API 테스트
 python3 tests/ui-test.py         # 모바일 화면 테스트 (Playwright 필요)
 ```
+
+## 앱 설치·플레이스토어 (2026-11 추가)
+
+- 휴대폰에서 **홈 화면에 추가**하면 주소창 없는 앱처럼 열려요. (`src/app/manifest.ts`, 아이콘: `public/icons/`)
+- 한 번 열어 본 화면은 인터넷이 끊겨도 보여요. (`public/sw.js`, 실제 배포에서만 작동)
+- 플레이스토어 등록용 이미지·문구·단계별 안내: **`store-assets/README.md`**
+- 개인정보처리방침 화면: `/privacy`
+- 안드로이드 앱 연결 파일 `/.well-known/assetlinks.json`은 Vercel 환경변수 `TWA_PACKAGE_NAME`, `TWA_SHA256`으로 채워져요.
+
+## 디자인 (2026-11 개선)
+
+- 간식 그림 8종과 홈 화면 강아지 캐릭터를 고급 SVG 일러스트로 다시 그렸어요. (`src/components/art.tsx`)
+- 홈 화면: 대표 일러스트 영역, 그림자 카드, 아이콘 버튼. 기능과 데이터 처리는 그대로예요.

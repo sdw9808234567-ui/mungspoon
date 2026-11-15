@@ -1,7 +1,6 @@
 // 여러 화면에서 함께 쓰는 작은 부품들
 import Link from "next/link";
 import type { Category } from "@/lib/safety/db";
-import type { TreatType } from "@/lib/types";
 
 /** 멍스푼 로고: 숟가락 그림 + 이름 */
 export function Logo() {
@@ -76,28 +75,10 @@ export function BigButton({
 }
 
 /**
- * 간식 종류별 그림 (사진이 없을 때 보여 주는 '예시 그림')
- * 실제 완성 사진은 '만든 기록'에 직접 찍어 올릴 수 있습니다.
+ * 간식 이미지: 실제 사진 또는 글자 타일 (art.tsx에 있어요)
+ * 다른 화면들은 지금처럼 ui.tsx에서 TreatArt를 불러오면 됩니다.
  */
-export function TreatArt({ type, className = "" }: { type: TreatType; className?: string }) {
-  const c = { dough: "#d9a45b", dark: "#a8743a", light: "#f3d9a4", cream: "#fffdf8" };
-  const art: Record<TreatType, React.ReactNode> = {
-    cookie: (<><circle cx="60" cy="50" r="30" fill={c.dough} /><circle cx="50" cy="42" r="4" fill={c.dark} /><circle cx="70" cy="46" r="4" fill={c.dark} /><circle cx="58" cy="62" r="4" fill={c.dark} /></>),
-    bread: (<><path d="M28 62c-8-26 8-40 32-40s40 14 32 40z" fill={c.dough} /><rect x="26" y="60" width="68" height="14" rx="5" fill={c.dark} /></>),
-    muffin: (<><path d="M30 46c0-16 14-24 30-24s30 8 30 24z" fill={c.dough} /><path d="M34 48h52l-7 30H41z" fill={c.dark} /></>),
-    cake: (<><rect x="28" y="40" width="64" height="36" rx="6" fill={c.dough} /><rect x="28" y="40" width="64" height="12" rx="6" fill={c.cream} /><circle cx="60" cy="33" r="6" fill={c.dark} /></>),
-    pudding: (<><path d="M36 76l8-40h32l8 40z" fill={c.light} /><path d="M42 44l2-8h32l2 8z" fill={c.dark} /></>),
-    donut: (<><circle cx="60" cy="50" r="30" fill={c.dough} /><circle cx="60" cy="50" r="11" fill="#f0e4cd" /><path d="M36 42a26 26 0 0 1 48 0c-6 6-10-2-16 3s-10-4-16 1-10-1-16-4z" fill={c.cream} /></>),
-    bite: (<><circle cx="44" cy="58" r="14" fill={c.dough} /><circle cx="74" cy="60" r="14" fill={c.dark} /><circle cx="60" cy="38" r="14" fill={c.light} /></>),
-    soft: (<><ellipse cx="46" cy="58" rx="18" ry="13" fill={c.light} /><ellipse cx="76" cy="50" rx="18" ry="13" fill={c.dough} /></>),
-  };
-  return (
-    <svg viewBox="0 0 120 100" preserveAspectRatio="xMidYMid slice" className={className} role="img" aria-label="간식 예시 그림">
-      <rect width="120" height="100" fill="#f0e4cd" />
-      {art[type]}
-    </svg>
-  );
-}
+export { TreatArt, hasTreatPhoto, HERO_PHOTO } from "./art";
 
 /**
  * 광고 자리 — 지금은 아무것도 보여 주지 않습니다.

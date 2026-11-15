@@ -5,13 +5,13 @@ import { TreatArt } from "./ui";
 
 export default function RecipeCard({ recipe, photo }: { recipe: Recipe; photo?: string }) {
   return (
-    <Link href={`/recipe?id=${recipe.id}`} className="flex items-center gap-4 rounded-2xl border border-sand bg-paper p-3 active:bg-beige">
-      {/* 직접 찍은 사진이 있으면 사진을, 없으면 예시 그림을 보여 줍니다 */}
+    <Link href={`/recipe?id=${recipe.id}`} className="flex items-center gap-4 rounded-2xl bg-paper p-3 shadow-card active:bg-beige">
+      {/* 사진이 먼저 눈에 들어오도록 크게: 직접 찍은 사진 → 없으면 종류별 대표 이미지 */}
       {photo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={photo} alt={`${recipe.name} 직접 만든 사진`} className="h-20 w-24 shrink-0 rounded-xl object-cover" />
+        <img src={photo} alt={`${recipe.name} 직접 만든 사진`} className="h-[104px] w-[124px] shrink-0 rounded-xl object-cover" />
       ) : (
-        <TreatArt type={recipe.type} className="h-20 w-24 shrink-0 rounded-xl" />
+        <TreatArt type={recipe.type} className="h-[104px] w-[124px] shrink-0 rounded-xl" />
       )}
       <span className="min-w-0">
         <span className="block truncate text-[18px] font-semibold">{recipe.name}</span>

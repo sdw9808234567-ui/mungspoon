@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { AdSlot, BigButton, TopBar, TreatArt } from "@/components/ui";
+import { AdSlot, BigButton, TopBar, TreatArt, hasTreatPhoto } from "@/components/ui";
 import { addLog, markViewed, shrinkPhoto, toggleFavorite, useFavorites, useLogs, useRecipes } from "@/lib/store";
 import type { Recipe } from "@/lib/types";
 
@@ -42,12 +42,15 @@ function Inner() {
       {/* 완성 이미지: 직접 만든 사진이 있으면 그 사진, 없으면 예시 그림 */}
       {myLogs[0]?.photo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={myLogs[0].photo} alt={`${recipe.name} 직접 만든 사진`} className="aspect-[6/5] w-full rounded-3xl object-cover" />
+        <img src={myLogs[0].photo} alt={`${recipe.name} 직접 만든 사진`} className="aspect-[6/5] w-full rounded-2xl object-cover" />
       ) : (
         <figure>
-          <TreatArt type={recipe.type} className="aspect-[6/5] w-full rounded-3xl" />
+          <TreatArt type={recipe.type} className="aspect-[6/5] w-full rounded-2xl" />
           <figcaption className="mt-1.5 text-[14px] text-muted">
-            예시 그림이에요. 아래 ‘만든 기록 남기기’에서 직접 찍은 사진으로 바꿀 수 있어요.
+            {/* 대표 사진이 있으면 '예시 사진'임을 알리고, 없으면 사진 올리는 방법만 안내 */}
+            {hasTreatPhoto(recipe.type)
+              ? "예시 사진이에요. 실제 모습은 재료에 따라 달라요. 아래 ‘만든 기록 남기기’에서 직접 찍은 사진으로 바꿀 수 있어요."
+              : "아래 ‘만든 기록 남기기’에서 직접 찍은 사진을 올리면 여기에 보여요."}
           </figcaption>
         </figure>
       )}
