@@ -78,7 +78,7 @@ export function BigButton({
  * 간식 이미지: 실제 사진 또는 글자 타일 (art.tsx에 있어요)
  * 다른 화면들은 지금처럼 ui.tsx에서 TreatArt를 불러오면 됩니다.
  */
-export { TreatArt, hasTreatPhoto } from "./art";
+export { TreatArt, hasTreatPhoto, HERO_PHOTO } from "./art";
 
 /**
  * 광고 자리 — 지금은 아무것도 보여 주지 않습니다.

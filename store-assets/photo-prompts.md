@@ -1,6 +1,7 @@
 # 간식 사진 8장 만들기 (AI 이미지 생성용 문구)
 
 앱의 간식 이미지는 **실제 사진**이 들어가도록 만들어져 있어요.
+반려견 사진은 쓰지 않고, 간식 제품 사진만 사용해요.
 아래 문구를 이미지 생성 도구(Higgsfield, ChatGPT 이미지 등)에 붙여넣어 사진을 만든 뒤 Claude에게 보내 주세요.
 8장 모두 같은 "공통 문구"를 써야 조명·배경이 통일돼요.
 
@@ -24,6 +25,14 @@ no nuts, no sugar sprinkles, no icing sugar, landscape 6:5 composition, subject 
 | `donut.jpg` | `oven-baked dog donuts made from sweet potato and rice flour, matte golden surface, thin plain yogurt glaze on top with finely grated carrot, not fried, not shiny,` |
 | `bite.jpg` | `small bite-size dog treats, round balls made from chicken breast, carrot and rice flour, lightly baked, visible carrot flecks, a small pile on the plate,` |
 | `soft.jpg` | `soft jelly-like dog treats cut into small cubes, made from tofu and apple, pale cream color, slightly translucent matte surface, a few thin fresh apple slices beside them,` |
+
+## 홈 화면 대표 배너 사진 (1장)
+파일 이름 `hero.jpg`, 가로로 긴 4:3 사진. 아래 문구 + 공통 문구를 함께 넣어 주세요.
+```
+an assortment of homemade dog treats arranged on a matte off-white ceramic platter: pumpkin cookies,
+mini sweet potato muffins with blueberries, a small yogurt-cream cake slice, baked donuts and bite-size chicken treats,
+styled like a premium pet bakery display, slightly angled top-down view,
+```
 
 ## 주의
 - 사진에 **초콜릿·포도·건포도·견과류·설탕 장식**이 보이면 다시 만들어 주세요. (강아지에게 위험한 재료예요)

@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import RecipeCard from "@/components/RecipeCard";
-import { AdSlot, TopBar, TreatArt } from "@/components/ui";
+import { AdSlot, HERO_PHOTO, TopBar, TreatArt } from "@/components/ui";
 import { PRESETS, presetHref } from "@/lib/presets";
 import { useLogs, useProfile, useRecipes, useViewed } from "@/lib/store";
 import { TREAT_TYPES } from "@/lib/types";
@@ -34,23 +34,35 @@ export default function HomePage() {
     <main>
       <TopBar right={<Link href="/blog" className="min-h-11 px-2 py-2 text-[15px] font-medium text-brown underline-offset-4 active:underline">블로그</Link>} />
 
-      {/* ── 대표 배너: 위에는 하쿠 실제 사진, 아래에는 소개 글 (글씨가 얼굴을 가리지 않게 분리) ── */}
-      <section className="mx-5 mt-1 overflow-hidden rounded-2xl bg-paper shadow-card">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/haku-hero.jpg"
-          alt="멍스푼의 주인공 시바견 하쿠"
-          width={960}
-          height={800}
-          fetchPriority="high"
-          className="aspect-[6/5] w-full object-cover"
-        />
-        <div className="px-5 pt-4 pb-5">
-          <span className="text-[12px] font-medium tracking-[0.22em] text-brown/70">HOMEMADE PET BAKERY</span>
-          <p className="mt-1.5 font-display text-[27px] font-bold leading-[1.3]">
+      {/* ── 대표 배너: 브랜드 소개 (반려견 사진은 쓰지 않습니다) ──
+          HERO_PHOTO(간식 제품 사진)가 등록되어 있으면 사진을 위에 보여 주고,
+          없으면 글자만 있는 짙은 브라운 배너로 보여 줍니다. */}
+      <section className="mx-5 mt-1 overflow-hidden rounded-2xl bg-espresso text-paper shadow-card">
+        {HERO_PHOTO && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={HERO_PHOTO}
+            alt="접시에 담긴 여러 가지 강아지 수제간식"
+            width={960}
+            height={720}
+            fetchPriority="high"
+            className="aspect-[4/3] w-full object-cover"
+          />
+        )}
+        <div className="px-6 pt-7 pb-6">
+          <span className="text-[12px] font-medium tracking-[0.24em] text-sand">HOMEMADE PET BAKERY</span>
+          <p className="mt-2.5 font-display text-[28px] font-bold leading-[1.3]">
             우리 강아지를 위한<br />건강한 한입
           </p>
-          <p className="mt-1.5 text-[14px] text-muted">무첨가 · 안전성을 통과한 재료로만 만드는 레시피</p>
+          <p className="mt-2.5 text-[14px] leading-relaxed text-beige">
+            재료의 안전성을 먼저 확인하고,<br />통과한 재료로만 레시피를 만듭니다.
+          </p>
+          {/* 서비스의 핵심 세 가지 (가는 선으로 구분) */}
+          <ul className="mt-5 grid grid-cols-3 border-t border-white/15 pt-4 text-center text-[13px] text-beige">
+            <li>무첨가 배합</li>
+            <li className="border-x border-white/15">재료 안전성 검사</li>
+            <li>수제간식 8종</li>
+          </ul>
         </div>
       </section>
 

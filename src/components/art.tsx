@@ -25,6 +25,13 @@ export const TREAT_PHOTOS: Partial<Record<TreatType, string>> = {
   // soft: "/treats/soft.jpg",
 };
 
+/**
+ * 홈 화면 대표 배너 사진 (여러 간식이 함께 담긴 펫 베이커리 제품 사진)
+ * 사진이 준비되면 public/treats/hero.jpg 로 넣고 아래 null 을 "/treats/hero.jpg" 로 바꾸세요.
+ * null 이면 사진 없이 글자만 있는 브랜드 배너가 보입니다.
+ */
+export const HERO_PHOTO: string | null = null;
+
 /** 이 종류의 실제 사진이 등록되어 있는지 */
 export const hasTreatPhoto = (type: TreatType) => !!TREAT_PHOTOS[type];
 
